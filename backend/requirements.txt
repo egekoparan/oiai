@@ -1,0 +1,22 @@
+fastapi
+uvicorn
+python-dotenv
+python-multipart
+# AI & RAG
+langchain
+langchain-community
+langchain-core
+langchain-ollama
+langchain-chroma
+chromadb
+langgraph
+# Retrieval & Reranking (User Requested)
+flashrank
+rank_bm25
+# Database
+sqlalchemy
+# Ingestion
+unstructured
+pypdf
+openpyxl
+python-pptx

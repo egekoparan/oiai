@@ -1,0 +1,35 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: orion_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./backend/data:/app/data
+    environment:
+      - CHROMA_DB_PATH=/app/data/chroma
+      # Crucial for Mac M1/M2: connect to host's Ollama
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - LLM_MODEL_NAME=llama3.2
+      - OLLAMA_KEEP_ALIVE=5m
+      # Passing other env vars if needed
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - NEXT_PUBLIC_API_URL=http://localhost:8000
+    container_name: orion_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - HOSTNAME=0.0.0.0
+      # NEXT_PUBLIC_ vars are embedded at build time, so we use build args above
+    depends_on:
+      - backend
+    restart: always

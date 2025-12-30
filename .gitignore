@@ -1,0 +1,34 @@
+# System
+.DS_Store
+
+# Environments - CRITICAL: Do not push .env
+.env
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Project Data (Local DBs and Vector Stores)
+data/
+backend/data/
+*.db
+*.sqlite
+chroma_db/
+
+# IDEs
+.vscode/
+.idea/
