@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+:root {
+  --background: #03050C; /* Deep technological void blue/black */
+  --foreground: #ffffff;
+  --neon-cyan: #00f3ff;
+  --neon-purple: #9d00ff;
+  --glass-border: rgba(0, 243, 255, 0.2);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-neon-cyan: var(--neon-cyan);
+  --color-neon-purple: var(--neon-purple);
+  --color-glass-border: var(--glass-border);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  overflow: hidden;
+  font-family: var(--font-geist-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan);
+  }
+  .box-glow {
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.1), inset 0 0 20px rgba(0, 243, 255, 0.05);
+  }
+}
