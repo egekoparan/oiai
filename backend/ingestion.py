@@ -1,6 +1,7 @@
 import hashlib
 import os
 import shutil
+import gc
 from typing import List, Optional
 from fastapi import UploadFile, HTTPException, status
 from sqlalchemy.orm import Session
@@ -70,7 +71,24 @@ async def process_upload(file: UploadFile, db: Session, product_id: Optional[int
             
         # 5. Index to ChromaDB
         vector_store = get_vector_store()
-        vector_store.add_documents(chunks)
+        
+        # Process in SMALLER batches to avoid OOM with large files
+        BATCH_SIZE = 20  # Reduced from 50 for memory safety
+        total_chunks = len(chunks)
+        total_batches = (total_chunks + BATCH_SIZE - 1) // BATCH_SIZE
+        
+        print(f"--- Started Indexing {total_chunks} chunks ({total_batches} batches) for {file.filename} ---")
+        
+        for i in range(0, total_chunks, BATCH_SIZE):
+            batch = chunks[i : i + BATCH_SIZE]
+            batch_num = i // BATCH_SIZE + 1
+            print(f"[{batch_num}/{total_batches}] Indexing {len(batch)} chunks...")
+            vector_store.add_documents(batch)
+            
+            # Force garbage collection to free memory between batches
+            gc.collect()
+            
+        print("--- Indexing Complete ---")
         
         # 6. Register in DB
         new_doc = DocumentRegistry(
